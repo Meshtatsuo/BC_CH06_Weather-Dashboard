@@ -9,23 +9,110 @@
     <!-- Link Fonts -->
 
     <!-- Link Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
   </head>
   <body>
     <header>
       <!-- Header Section-->
+      <div id="credit">
+        <a href="https://www.github.com/Meshtatsuo" target="_blank"
+          ><p>Created by Dominic Misasi | January 2022</p></a
+        >
+      </div>
+      <h1>Weather Dashboard</h1>
     </header>
 
     <aside>
-      <!-- Sidebar with Search form and recent searches-->
+      <!-- Search Form -->
+      <form id="searchForm">
+        <h2>Search for a City:</h2>
+        <input
+          type="text"
+          id="citySearch"
+          name="city"
+          value="Search Cities Here"
+        />
+        <input type="submit" value="Search" id="searchButton" />
+      </form>
+
+      <!-- Recent searches loaded from local storage -->
+      <ul id="recentSearches">
+        <li class="recentSearchItem"><h3>Denver</h3></li>
+        <li class="recentSearchItem"><h3>Boise</h3></li>
+        <li class="recentSearchItem"><h3>New Orleans</h3></li>
+        <li class="recentSearchItem"><h3>Seattle</h3></li>
+        <li class="recentSearchItem"><h3>Milwaukee</h3></li>
+      </ul>
     </aside>
 
     <main>
       <!-- Main weather section -->
-    </main>
+      <!-- Today's weather summary -->
+      <div class="daySummary">
+        <h2 class="glossy" id="location-date">Denver (1/30/2022)</h2>
+        <ul class="glossy" id="summaryList">
+          <li id="currentTemp">Temperature: 74.32F</li>
+          <li id="windInfo">Wind: 6.67 MPH</li>
+          <li id="humidityInfo">Humidity: 46%</li>
+          <li id="uvIndex">UV Index: <span id="uvVal">0.47</span></li>
+        </ul>
+      </div>
 
-    <footer>
-      <!-- Footer -->
-    </footer>
+      <!-- 5 day forecast -->
+      <div class="fiveDayForecast">
+        <h3>5-Day Forecast:</h3>
+        <!-- Forecast Day 1 Example -->
+        <div class="forecastCard glossy" id="day-1">
+          <ul class="forecastList">
+            <li id="forecastDate"><h4>3/31/2022</h4></li>
+            <li id="forecastEmoji">🌧</li>
+            <li id="forecastTemp">Temp: 73.72F</li>
+            <li id="forecastWind">Wind: 5.32 MPH</li>
+            <li id="forecastHumidity">Humidity: 96%</li>
+          </ul>
+        </div>
+        <!-- Forecast Day 2 Example -->
+        <div class="forecastCard glossy" id="day-1">
+          <ul class="forecastList">
+            <li id="forecastDate"><h4>3/31/2022</h4></li>
+            <li id="forecastEmoji">🌧</li>
+            <li id="forecastTemp">Temp: 73.72F</li>
+            <li id="forecastWind">Wind: 5.32 MPH</li>
+            <li id="forecastHumidity">Humidity: 96%</li>
+          </ul>
+        </div>
+        <!-- Forecast Day 3 Example -->
+        <div class="forecastCard glossy" id="day-1">
+          <ul class="forecastList">
+            <li id="forecastDate"><h4>3/31/2022</h4></li>
+            <li id="forecastEmoji">🌧</li>
+            <li id="forecastTemp">Temp: 73.72F</li>
+            <li id="forecastWind">Wind: 5.32 MPH</li>
+            <li id="forecastHumidity">Humidity: 96%</li>
+          </ul>
+        </div>
+        <!-- Forecast Day 4 Example -->
+        <div class="forecastCard glossy" id="day-1">
+          <ul class="forecastList">
+            <li id="forecastDate"><h4>3/31/2022</h4></li>
+            <li id="forecastEmoji">🌧</li>
+            <li id="forecastTemp">Temp: 73.72F</li>
+            <li id="forecastWind">Wind: 5.32 MPH</li>
+            <li id="forecastHumidity">Humidity: 96%</li>
+          </ul>
+        </div>
+        <!-- Forecast Day 5 Example -->
+        <div class="forecastCard glossy" id="day-1">
+          <ul class="forecastList">
+            <li id="forecastDate"><h4>3/31/2022</h4></li>
+            <li id="forecastEmoji">🌧</li>
+            <li id="forecastTemp">Temp: 73.72F</li>
+            <li id="forecastWind">Wind: 5.32 MPH</li>
+            <li id="forecastHumidity">Humidity: 96%</li>
+          </ul>
+        </div>
+      </div>
+    </main>
     <!-- Link Scripts -->
   </body>
 </html>
