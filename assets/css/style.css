@@ -32,8 +32,8 @@ header {
   top: 0;
   background: linear-gradient(
     90deg,
-    rgba(9, 9, 121, 1) 0%,
-    rgba(0, 212, 255, 1) 100%
+    rgba(9, 9, 121, 0.6) 0%,
+    rgba(0, 212, 255, 0.6) 100%
   );
   z-index: 999;
 }
@@ -77,14 +77,13 @@ aside {
   align-content: flex-start;
   position: relative;
   left: 0;
-  background-color: #eeeeee;
+  background-color: rgba(233, 233, 233, 0.8);
 }
 
 aside h2 {
   flex: 1 1 100%;
   padding-top: 5%;
   text-align: center;
-
   font-weight: 300;
 }
 
@@ -180,11 +179,17 @@ main {
   min-height: 40%;
 }
 
+.fiveDayForecastTitle {
+  flex: 1 1 100%;
+}
+
 .fiveDayForecast h3 {
-  flex: 0 0 100%;
+  margin: 1%;
+  margin-left: 3%;
+  padding: 1%;
   font-size: 24px;
-  padding-left: 10%;
-  margin: 1% 25% 1% 25%;
+  max-width: 15%;
+  border-radius: 10px;
 }
 
 .forecastCard {
