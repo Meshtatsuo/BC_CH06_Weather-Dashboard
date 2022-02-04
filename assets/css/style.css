@@ -208,9 +208,15 @@ main {
   text-align: center;
 }
 
+.forecastList ul {
+  text-decoration: none;
+}
+
 .forecastList li {
   padding: 5%;
   font-size: 18px;
+
+  list-style: none;
 }
 
 #forecastEmoji {

@@ -55,13 +55,16 @@ var getCityCoordinates = async function (cityName) {
       response.json().then(function (data) {
         // if successful data retrieved, add
         // data to recent searches
-        recentSearches.push({
+        recentSearches.unshift({
           name: cityName,
           latitude: data[0].lat,
           longitude: data[0].lon,
         });
+        if (recentSearches.length > 8) {
+          recentSearches.splice(recentSearches.length - 1, 1);
+        }
+        saveRecentSearches();
         currentCity = cityName;
-        console.log(recentSearches);
         retrieveWeatherInfo(data[0].lat, data[0].lon);
       });
     }
@@ -72,6 +75,14 @@ var getCityCoordinates = async function (cityName) {
   });
 };
 
+const loadRecentSearches = function () {
+  recentSearches = JSON.parse(localStorage.getItem("Recent Searches"));
+  console.log(recentSearches);
+};
+
+const saveRecentSearches = function () {
+  localStorage.setItem("Recent Searches", JSON.stringify(recentSearches));
+};
 // GUI MANAGEMENT FUNCTIONS
 const updateWeatherGUI = function (data) {
   // Update current condition display
@@ -80,11 +91,14 @@ const updateWeatherGUI = function (data) {
   let currentWind = $("#windInfo");
   let currentHumidity = $("#humidityInfo");
   let currentUV = $("#uvIndex");
-  console.log(data);
 
   // set location and date header
   locationDisplay.text(
-    currentCity + "    " + new Date(data.current.dt * 1000).toLocaleString()
+    currentCity +
+      "    " +
+      "(" +
+      new Date(data.current.dt * 1000).toLocaleString().split(",")[0] +
+      ")"
   );
 
   // set current weather stats
@@ -94,7 +108,63 @@ const updateWeatherGUI = function (data) {
   currentUV.text("UV Index:  " + data.current.uvi);
 
   // set 5 day forecast
-  
+  for (i = 0; i <= 4; i++) {
+    // get vars ready for displaying
+    let container = $(".fiveDayForecast");
+    let cardEl = $("<div>");
+    let cardListEl = $("<ul>");
+    let liDate = $("<li>");
+    let liIcon = $("<li>");
+    let liTemp = $("<li>");
+    let liWind = $("<li>");
+    let liHumid = $("<li>");
+    let forecastDateEl = $("<h4>");
+    let forecastTempEl = $("<p>");
+    let forecastIcon = $("<img>");
+    let forecastWind = $("<p>");
+    let forecastHumidity = $("<p>");
+
+    // assign classes and IDs
+    cardEl.addClass("forecastCard glossy");
+    cardEl.attr("id", "day-" + (i + 1));
+    cardListEl.addClass("forecastList");
+    liDate.attr("id", "forecastDate");
+    liIcon.attr("id", "forecastEmoji");
+    liTemp.attr("id", "forecastTemp");
+    liWind.attr("id", "forecastWind");
+    liHumid.attr("id", "forecastHumidity");
+
+    // assign proper values
+    let date = new Date(data.daily[i].dt * 1000).toLocaleString().split(",")[0];
+    forecastDateEl.text(date);
+    forecastIcon.attr(
+      "src",
+      "http://openweathermap.org/img/w/" +
+        data.daily[i].weather[0].icon +
+        ".png"
+    );
+    forecastTempEl.text("High: " + data.daily[i].temp.max + "°F");
+    forecastWind.text("Wind: " + (data.daily[i].wind_speed + " MPH"));
+    forecastHumidity.text("Humidity: " + data.daily[i].humidity + "%");
+
+    // add appropriate list item parents
+    liDate.append(forecastDateEl);
+    liIcon.append(forecastIcon);
+    liTemp.append(forecastTempEl);
+    liWind.append(forecastWind);
+    liHumid.append(forecastHumidity);
+
+    // append items to new card item
+    cardListEl.append(liDate);
+    cardListEl.append(liIcon);
+    cardListEl.append(liTemp);
+    cardListEl.append(liWind);
+    cardListEl.append(liHumid);
+    cardEl.append(cardListEl);
+
+    // add new card to card container
+    container.append(cardEl);
+  }
 };
 
 // When search button hit (or form submitted)
