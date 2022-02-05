@@ -1,11 +1,7 @@
-// GUI MANAGER
-// This script manages the displaying of elements
-// on the page. Keeping the OpenWeather API requests
-// seperate from the updating and displaying of elements
-
 // Global Variables
 var input = $("#citySearch");
 var searchButton = $("#searchButton");
+var recentSearchList = $("#recentSearches");
 var weatherInfo = "";
 var currentCity = "";
 var bodyEl = $("body");
@@ -60,6 +56,8 @@ var getCityCoordinates = async function (cityName) {
           latitude: data[0].lat,
           longitude: data[0].lon,
         });
+        saveRecentSearches();
+        updateRecentSearchGUI();
         if (recentSearches.length > 8) {
           recentSearches.splice(recentSearches.length - 1, 1);
         }
@@ -75,6 +73,7 @@ var getCityCoordinates = async function (cityName) {
   });
 };
 
+// LOCAL STORAGE MANAGEMENT
 const loadRecentSearches = function () {
   recentSearches = JSON.parse(localStorage.getItem("Recent Searches"));
   console.log(recentSearches);
@@ -83,6 +82,7 @@ const loadRecentSearches = function () {
 const saveRecentSearches = function () {
   localStorage.setItem("Recent Searches", JSON.stringify(recentSearches));
 };
+
 // GUI MANAGEMENT FUNCTIONS
 const updateWeatherGUI = function (data) {
   // Update current condition display
@@ -105,7 +105,7 @@ const updateWeatherGUI = function (data) {
   currentTemp.text("Temperature: " + data.current.temp + "°F");
   currentWind.text("Wind Speed: " + data.current.wind_speed + " MPH");
   currentHumidity.text("Humidity: " + data.current.humidity + "%");
-  currentUV.text("UV Index:  " + data.current.uvi);
+  currentUV.html("UV Index:  <span id='uvVal'>" + data.current.uvi + "</span>");
 
   // set 5 day forecast
   for (i = 0; i <= 4; i++) {
@@ -167,9 +167,47 @@ const updateWeatherGUI = function (data) {
   }
 };
 
+const updateRecentSearchGUI = function () {
+  // Add or update recent searches to GUI
+  if (recentSearches) {
+    let listEl = $("#recentSearches");
+    listEl.html("");
+    for (i = 0; i < recentSearches.length; i++) {
+      let searchItem = $("<li>");
+      let cityName = $("<h3>");
+      searchItem.addClass("recentSearchItem");
+      cityName.text(recentSearches[i].name);
+      cityName.attr("id", recentSearches[i].name);
+      searchItem.attr("id", recentSearches[i].name);
+      searchItem.append(cityName);
+      listEl.append(searchItem);
+    }
+  }
+};
+
+// RUN ON PAGE LOAD
+loadRecentSearches();
+updateRecentSearchGUI();
+
 // When search button hit (or form submitted)
 // validate text in input
 searchButton.on("click", function (e) {
   e.preventDefault();
   getCityCoordinates(input.val());
+});
+
+recentSearchList.on("click", ".recentSearchItem", function (e) {
+  let name = e.target.id;
+  // Find index of cityInfo object within recentSearches
+  // based on name attribute
+  let index = recentSearches
+    .map(function (o) {
+      return o.name;
+    })
+    .indexOf(name);
+  currentCity = recentSearches[index].name;
+  retrieveWeatherInfo(
+    recentSearches[index].latitude,
+    recentSearches[index].longitude
+  );
 });
