@@ -5,7 +5,6 @@
 }
 
 body {
-  background-image: url("../images/sunny-warm/pexels-irina-iriser-3134681.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -15,10 +14,35 @@ body {
   font-family: "Quattrocento Sans", sans-serif;
   font-weight: 700;
 }
+/* clases used to change out backgrounds based on 
+weather conditions. only used on body */
+.warm-clear {
+  background-image: url("../images/Clear/clear-warm.jpg");
+}
+
+.cold-clear {
+  background-image: url("../images/Clear/clear-cold.jpg");
+}
+
+.warm-clouds {
+  background-image: url("../images/Clouds/cloudy-warm.jpg");
+}
+
+.cold-clouds {
+  background-image: url("../images/Clouds/cloudy-cool.jpg");
+}
+
+.snowy {
+  background-image: url("../images/snowy/snowy.jpg");
+}
+
+.rainy {
+  background-image: url("../images/rainy/rainy.jpg");
+}
 /* GENERAL CLASS STYLINGS */
 
 .glossy {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 15px;
 }
 
@@ -167,6 +191,33 @@ main {
 
 .daySummary ul li {
   padding: 2%;
+}
+
+.daySummary span {
+  padding: 5px;
+  color: white;
+}
+/* background updates for UV Index */
+.uvLow {
+  background-color: green;
+}
+
+.uvLowMed {
+  background-color: yellow;
+  color: black;
+}
+
+.uvMedHigh {
+  background-color: orange;
+  color: black;
+}
+
+.uvHigh {
+  background-color: red;
+}
+
+.uvDanger {
+  background-color: violet;
 }
 
 .fiveDayForecast {

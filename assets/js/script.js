@@ -85,7 +85,37 @@ const saveRecentSearches = function () {
 
 // GUI MANAGEMENT FUNCTIONS
 const updateWeatherGUI = function (data) {
-  // Update current condition display
+  // Update background first because why not?
+  let body = $("body");
+  console.log(data.current.weather[0].main);
+  body.removeClass();
+  switch (data.current.weather[0].main) {
+    case "Clouds":
+      if (data.current.temp <= 40) {
+        body.addClass("cold-clouds");
+      } else {
+        body.addClass("warm-clouds");
+      }
+      break;
+    case "Clear":
+      if (data.current.temp <= 40) {
+        body.addClass("cold-clear");
+      } else {
+        body.addClass("warm-clear");
+      }
+      break;
+    case "Rain":
+      if (data.current.temp < 32) {
+        body.addClass("snowy");
+      } else {
+        body.addClass("rainy");
+      }
+      break;
+    default:
+      body.addClass("warm-clear");
+  }
+
+  // Update current condition displays
   let locationDisplay = $("#location-date");
   let currentTemp = $("#currentTemp");
   let currentWind = $("#windInfo");
@@ -107,7 +137,28 @@ const updateWeatherGUI = function (data) {
   currentHumidity.text("Humidity: " + data.current.humidity + "%");
   currentUV.html("UV Index:  <span id='uvVal'>" + data.current.uvi + "</span>");
 
+  // update span class for UV
+  let uv = $("#uvVal");
+
+  if (data.current.uvi >= 11) {
+    uv.addClass("uvDanger");
+  } else if (data.current.uvi >= 8) {
+    uv.addClass("uvHigh");
+  } else if (data.current.uvi >= 6) {
+    uv.addClass("uvMedHigh");
+  } else if (data.current.uvi >= 3) {
+    uv.addClass("uvLowMed");
+  } else {
+    uv.addClass("uvLow");
+  }
+
   // set 5 day forecast
+  if ($(".forecastList")) {
+    $(".fiveDayForecast").html(
+      "<div class='fiveDayForecastTitle'><h3 class='glossy'>5-Day Forecast:</h3></div>"
+    );
+  }
+
   for (i = 0; i <= 4; i++) {
     // get vars ready for displaying
     let container = $(".fiveDayForecast");
@@ -172,7 +223,7 @@ const updateRecentSearchGUI = function () {
   if (recentSearches) {
     let listEl = $("#recentSearches");
     listEl.html("");
-    for (i = 0; i < recentSearches.length; i++) {
+    for (i = 0; i < 8; i++) {
       let searchItem = $("<li>");
       let cityName = $("<h3>");
       searchItem.addClass("recentSearchItem");
