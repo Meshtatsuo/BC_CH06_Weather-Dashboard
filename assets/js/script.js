@@ -6,6 +6,7 @@ var weatherInfo = "";
 var currentCity = "";
 var bodyEl = $("body");
 
+let token = "9c332cd8337bfb2e9e7bb90c7456414d";
 // for storing recent searches
 var cityInfo = {
   name: "",
@@ -23,7 +24,8 @@ var retrieveWeatherInfo = async function (lat, lon) {
     lat +
     "&lon=" +
     lon +
-    "&exclude=minutely,hourly&units=imperial&appid=9c332cd8337bfb2e9e7bb90c7456414d";
+    "&exclude=minutely,hourly&units=imperial&appid=" +
+    token;
 
   fetch(apiWeatherCall).then(function (response) {
     //request was successful
@@ -44,7 +46,8 @@ var getCityCoordinates = async function (cityName) {
   let apiGeoCoding =
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
     cityName +
-    "&appid=9c332cd8337bfb2e9e7bb90c7456414d";
+    "&appid=" +
+    token;
   fetch(apiGeoCoding).then(function (response) {
     //request was successful
     if (response.ok) {
