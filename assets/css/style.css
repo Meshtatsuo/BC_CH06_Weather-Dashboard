@@ -334,4 +334,8 @@ the aside to the top if screen size is smaller than
     flex: 0 0 100%;
     overflow: visible;
   }
+  .fiveDayForecastTitle h3 {
+    flex: 1 1 100%;
+    font-size: 18px;
+  }
 }
