@@ -1,23 +1,25 @@
 // Global Variables
+// Grabbing DOM elements we'll need to
+// interact with consistently
 var input = $("#citySearch");
 var searchButton = $("#searchButton");
 var recentSearchList = $("#recentSearches");
 var weatherInfo = "";
 var currentCity = "";
 var bodyEl = $("body");
-
 var listEl = $("#recentSearches");
+// Only done for this project. Would normally never have access
+// keys accessible to public
+var weatherToken = "9c332cd8337bfb2e9e7bb90c7456414d";
+var geoToken = "e58236752014478c9e5fd217fa077ebf";
 
-let weatherToken = "9c332cd8337bfb2e9e7bb90c7456414d";
-
-let geoToken = "e58236752014478c9e5fd217fa077ebf";
 // for storing recent searches
 var cityInfo = {
   name: "",
   latitude: 0,
   longitude: 0,
 };
-
+// For storing all searches together and saving/loading in localStorage
 var recentSearches = [];
 
 // API FETCH REQUESTS
@@ -59,6 +61,8 @@ var getCityCoordinates = async function (cityName) {
         // if successful data retrieved, add
         // data to recent searches
         if (!recentSearches) {
+          // resets recentSearches back to empty array
+          // in the event it returns null
           recentSearches = [];
           recentSearches.push({
             name: cityName,
@@ -72,7 +76,7 @@ var getCityCoordinates = async function (cityName) {
             longitude: data.results[0].geometry.lng,
           });
         }
-
+        // Sets max length on array, removing the oldest entry
         if (recentSearches.length > 8) {
           recentSearches.splice(-1);
         }
@@ -110,7 +114,7 @@ const saveRecentSearches = function () {
 
 // GUI MANAGEMENT FUNCTIONS
 const updateWeatherGUI = function (data) {
-  // Update background first because why not?
+  // Update background because why not?
   let body = $("body");
   body.removeClass();
   switch (data.current.weather[0].main) {

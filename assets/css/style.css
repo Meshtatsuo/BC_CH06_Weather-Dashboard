@@ -163,12 +163,14 @@ aside h2 {
   font-weight: 300;
 }
 
+/* MAIN WEATHER DISPLAY STYLINGS */
 main {
   flex: 0 0 80%;
   display: flex;
   flex-wrap: wrap;
 }
 
+/* DAY SUMMARY */
 .daySummary {
   flex: 0 0 100%;
   display: flex;
@@ -220,6 +222,7 @@ main {
   background-color: violet;
 }
 
+/* FIVE DAY FORECAST STYLINGS */
 .fiveDayForecast {
   flex: 0 0 100%;
   margin-bottom: 5%;
@@ -273,4 +276,62 @@ main {
 #forecastEmoji {
   font-size: 48px;
   text-align: center;
+}
+
+/* MEDIA QUERIES FOR CHANGES ON SMALLER SCREENS */
+
+/* Biggest changes here were fixing overflow issues
+as a result of how I set up the main page, and moving
+the aside to the top if screen size is smaller than 
+768px wide*/
+
+@media screen and (max-width: 1200px) {
+  * {
+    overflow: auto;
+  }
+  body {
+    height: 100vh;
+  }
+
+  .fiveDayForecast {
+    flex: 1 1 100%;
+    overflow: visible;
+  }
+  .forecastCard {
+    flex: 0 1 35%;
+    margin: 2%;
+    min-height: 30%;
+    max-height: 30%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  aside {
+    flex: 0 0 100%;
+    height: 40vh;
+    background-color: rgba(233, 233, 233, 0.8);
+    overflow: hidden;
+  }
+  #searchForm {
+    overflow: visible;
+    height: 50%;
+  }
+  #searchButton {
+    overflow: hidden;
+  }
+  #recentSearches {
+    overflow: scroll;
+  }
+  main {
+    flex: 1 1 100%;
+    overflow: visible;
+  }
+  .daySummary {
+    flex: 0 0 100%;
+    overflow: visible;
+  }
+  .fiveDayForecast {
+    flex: 0 0 100%;
+    overflow: visible;
+  }
 }
