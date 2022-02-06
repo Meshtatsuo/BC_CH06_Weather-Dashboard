@@ -6,6 +6,8 @@ var weatherInfo = "";
 var currentCity = "";
 var bodyEl = $("body");
 
+var listEl = $("#recentSearches");
+
 let weatherToken = "9c332cd8337bfb2e9e7bb90c7456414d";
 
 let geoToken = "e58236752014478c9e5fd217fa077ebf";
@@ -57,17 +59,26 @@ var getCityCoordinates = async function (cityName) {
       response.json().then(function (data) {
         // if successful data retrieved, add
         // data to recent searches
-
-        recentSearches.unshift({
-          name: cityName,
-          latitude: data.results[0].geometry.lat,
-          longitude: data.results[0].geometry.lng,
-        });
-        saveRecentSearches();
-        updateRecentSearchGUI();
-        if (recentSearches.length > 8) {
-          recentSearches.splice(recentSearches.length - 1, 1);
+        if (!recentSearches) {
+          recentSearches = [];
+          recentSearches.push({
+            name: cityName,
+            latitude: data.results[0].geometry.lat,
+            longitude: data.results[0].geometry.lng,
+          });
+        } else {
+          recentSearches.unshift({
+            name: cityName,
+            latitude: data.results[0].geometry.lat,
+            longitude: data.results[0].geometry.lng,
+          });
         }
+
+        if (recentSearches.length > 8) {
+          recentSearches.splice(-1);
+        }
+
+        updateRecentSearchGUI();
         saveRecentSearches();
         currentCity = cityName;
         retrieveWeatherInfo(
@@ -85,8 +96,13 @@ var getCityCoordinates = async function (cityName) {
 
 // LOCAL STORAGE MANAGEMENT
 const loadRecentSearches = function () {
-  recentSearches = JSON.parse(localStorage.getItem("Recent Searches"));
-  console.log(recentSearches);
+  savedSearches = JSON.parse(localStorage.getItem("Recent Searches"));
+  if (savedSearches) {
+    recentSearches = savedSearches;
+    return true;
+  } else {
+    return false;
+  }
 };
 
 const saveRecentSearches = function () {
@@ -230,25 +246,29 @@ const updateWeatherGUI = function (data) {
 
 const updateRecentSearchGUI = function () {
   // Add or update recent searches to GUI
+  listEl.empty();
   if (recentSearches) {
-    let listEl = $("#recentSearches");
-    listEl.html("");
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < recentSearches.length; i++) {
       let searchItem = $("<li>");
       let cityName = $("<h3>");
       searchItem.addClass("recentSearchItem");
+
       cityName.text(recentSearches[i].name);
       cityName.attr("id", recentSearches[i].name);
       searchItem.attr("id", recentSearches[i].name);
       searchItem.append(cityName);
       listEl.append(searchItem);
     }
+  } else {
+    listEl.html("");
   }
 };
 
 // RUN ON PAGE LOAD
-loadRecentSearches();
-updateRecentSearchGUI();
+let success = loadRecentSearches();
+if (success) {
+  updateRecentSearchGUI();
+}
 
 // When search button hit (or form submitted)
 // validate text in input
