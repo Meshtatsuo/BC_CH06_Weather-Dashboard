@@ -36,7 +36,6 @@ var retrieveWeatherInfo = async function (lat, lon) {
     if (response.ok) {
       response.json().then(function (data) {
         weatherInfo = data;
-        console.log(data);
         updateWeatherGUI(weatherInfo);
       });
     }
@@ -113,7 +112,6 @@ const saveRecentSearches = function () {
 const updateWeatherGUI = function (data) {
   // Update background first because why not?
   let body = $("body");
-  console.log(data.current.weather[0].main);
   body.removeClass();
   switch (data.current.weather[0].main) {
     case "Clouds":
