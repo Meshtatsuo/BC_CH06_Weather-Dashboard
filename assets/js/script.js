@@ -6,7 +6,9 @@ var weatherInfo = "";
 var currentCity = "";
 var bodyEl = $("body");
 
-let token = "9c332cd8337bfb2e9e7bb90c7456414d";
+let weatherToken = "9c332cd8337bfb2e9e7bb90c7456414d";
+
+let geoToken = "e58236752014478c9e5fd217fa077ebf";
 // for storing recent searches
 var cityInfo = {
   name: "",
@@ -25,13 +27,14 @@ var retrieveWeatherInfo = async function (lat, lon) {
     "&lon=" +
     lon +
     "&exclude=minutely,hourly&units=imperial&appid=" +
-    token;
+    weatherToken;
 
   fetch(apiWeatherCall).then(function (response) {
     //request was successful
     if (response.ok) {
       response.json().then(function (data) {
         weatherInfo = data;
+        console.log(data);
         updateWeatherGUI(weatherInfo);
       });
     }
@@ -44,20 +47,21 @@ var retrieveWeatherInfo = async function (lat, lon) {
 
 var getCityCoordinates = async function (cityName) {
   let apiGeoCoding =
-    "https://api.openweathermap.org/geo/1.0/direct?q=" +
+    "https://api.opencagedata.com/geocode/v1/json?q=" +
     cityName +
-    "&appid=" +
-    token;
+    "&key=" +
+    geoToken;
   fetch(apiGeoCoding).then(function (response) {
     //request was successful
     if (response.ok) {
       response.json().then(function (data) {
         // if successful data retrieved, add
         // data to recent searches
+
         recentSearches.unshift({
           name: cityName,
-          latitude: data[0].lat,
-          longitude: data[0].lon,
+          latitude: data.results[0].geometry.lat,
+          longitude: data.results[0].geometry.lng,
         });
         saveRecentSearches();
         updateRecentSearchGUI();
@@ -66,7 +70,10 @@ var getCityCoordinates = async function (cityName) {
         }
         saveRecentSearches();
         currentCity = cityName;
-        retrieveWeatherInfo(data[0].lat, data[0].lon);
+        retrieveWeatherInfo(
+          data.results[0].geometry.lat,
+          data.results[0].geometry.lng
+        );
       });
     }
     //request was unsuccessful
